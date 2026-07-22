@@ -1,0 +1,556 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>شغف القهوة</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Aref+Ruqaa:wght@400;700&family=Tajawal:wght@300;400;500;700;800&display=swap');
+
+  :root{
+    --teal-1:#42C8B5;
+    --teal-2:#159C8E;
+    --teal-3:#0A6E63;
+    --teal-deep:#063F39;
+    --cream:#EAFBF6;
+    --coffee:#3B2415;
+    --coffee-dark:#28170D;
+  }
+
+  *{ box-sizing:border-box; margin:0; padding:0; }
+
+  body{
+    font-family:'Tajawal', sans-serif;
+    background:#fff;
+    color:var(--coffee-dark);
+    overflow-x: hidden;
+  }
+
+  /* ---------- header ---------- */
+  .site-header{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    padding:22px 32px;
+    background:linear-gradient(135deg, var(--teal-1) 0%, var(--teal-2) 55%, var(--teal-3) 100%);
+  }
+
+  .logo{
+    font-family:'Aref Ruqaa', serif;
+    font-weight:700;
+    font-size:28px;
+    color:#fff;
+    letter-spacing:0.5px;
+  }
+  .logo-sub{ font-weight:400; font-size:20px; opacity:0.92; }
+
+  .menu-toggle{
+    background:none;
+    border:1.5px solid rgba(255,255,255,0.55);
+    border-radius:10px;
+    width:46px;
+    height:46px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    cursor:pointer;
+    transition:background .25s ease;
+  }
+  .menu-toggle:hover{ background:rgba(255,255,255,0.12); }
+  .menu-toggle svg{ width:22px; height:22px; }
+  .menu-toggle rect{ fill:#fff; }
+
+  /* ---------- hero (context behind the menu) ---------- */
+  .hero{
+    padding:90px 40px;
+    text-align:center;
+    max-width:720px;
+    margin:0 auto;
+  }
+  .hero h1{
+    font-family:'Aref Ruqaa', serif;
+    font-size:44px;
+    color:var(--teal-3);
+    margin-bottom:18px;
+  }
+  .hero p{
+    font-size:17px;
+    line-height:1.9;
+    color:#4a4a46;
+    margin-bottom:30px;
+  }
+  .hero-cta{
+    display:inline-block;
+    font-size:16px;
+    font-weight:700;
+    color:#fff;
+    background:var(--teal-3);
+    padding:14px 34px;
+    border-radius:30px;
+    text-decoration:none;
+    transition:transform .2s ease, background .2s ease;
+  }
+  .hero-cta:hover{ background:var(--teal-deep); transform:translateY(-2px); }
+
+  /* ---------- full-screen menu ---------- */
+  .site-menu{
+    position:fixed;
+    inset:0;
+    background:linear-gradient(135deg, var(--teal-1) 0%, var(--teal-2) 50%, var(--teal-3) 100%);
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    opacity:0;
+    visibility:hidden;
+    transform:scale(1.04);
+    transition:opacity .45s ease, transform .45s ease, visibility .45s;
+    z-index:100;
+  }
+  .site-menu.open{
+    opacity:1;
+    visibility:visible;
+    transform:scale(1);
+  }
+
+  .menu-close{
+    position:absolute;
+    top:26px;
+    left:32px;
+    background:none;
+    border:1.5px solid rgba(255,255,255,0.55);
+    border-radius:10px;
+    width:44px;
+    height:44px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    cursor:pointer;
+  }
+  .menu-close svg{ width:18px; height:18px; }
+  .menu-close line{ stroke:#fff; stroke-width:2.4; stroke-linecap:round; }
+
+  .menu-inner{
+    text-align:center;
+    padding:20px;
+  }
+
+  .menu-brand-title{
+    font-family:'Aref Ruqaa', serif;
+    font-weight:700;
+    font-size:26px;
+    color:#fff;
+    opacity:0.85;
+    margin-bottom:6px;
+  }
+  .menu-brand-tagline{
+    font-size:13px;
+    color:var(--cream);
+    letter-spacing:1px;
+    margin-bottom:46px;
+    opacity:0.8;
+  }
+
+  .menu-links{
+    list-style:none;
+    display:flex;
+    flex-direction:column;
+    gap:8px;
+    margin-bottom:52px;
+  }
+
+  .nav-link{
+    position:relative;
+    display:inline-block;
+    font-family:'Tajawal', sans-serif;
+    font-weight:800;
+    font-size:clamp(32px, 6vw, 56px);
+    color:#fff;
+    text-decoration:none;
+    padding:6px 4px;
+    opacity:0;
+    transform:translateY(14px);
+    transition:color .2s ease;
+  }
+  .site-menu.open .nav-link{
+    animation:riseIn .5s ease forwards;
+  }
+  .menu-links li:nth-child(1) .nav-link{ animation-delay:.05s; }
+  .menu-links li:nth-child(2) .nav-link{ animation-delay:.12s; }
+  .menu-links li:nth-child(3) .nav-link{ animation-delay:.19s; }
+
+  @keyframes riseIn{ to{ opacity:1; transform:translateY(0); } }
+
+  .nav-link:hover, .nav-link:focus-visible{ color:var(--cream); }
+
+  .swoosh{
+    position:absolute;
+    bottom:-6px;
+    right:0;
+    width:100%;
+    height:14px;
+    overflow:visible;
+  }
+  .swoosh path{
+    fill:none;
+    stroke:#fff;
+    stroke-width:3;
+    stroke-linecap:round;
+    stroke-dasharray:220;
+    stroke-dashoffset:220;
+    transition:stroke-dashoffset .5s ease;
+  }
+  .nav-link:hover .swoosh path,
+  .nav-link:focus-visible .swoosh path{ stroke-dashoffset:0; }
+
+  .cta-button{
+    display:inline-block;
+    font-size:18px;
+    font-weight:700;
+    color:#fff;
+    background:var(--coffee);
+    padding:16px 46px;
+    border-radius:32px;
+    text-decoration:none;
+    opacity:0;
+    transform:translateY(14px);
+    transition:background .2s ease, transform .2s ease;
+  }
+  .site-menu.open .cta-button{ animation:riseIn .5s ease forwards; animation-delay:.42s; }
+  .cta-button:hover{ background:var(--coffee-dark); transform:translateY(-2px); }
+
+  /* ---------- switching between nav view and real menu view ---------- */
+  .nav-view.hidden{ display:none; }
+
+  .menu-back{
+    position:absolute;
+    top:26px;
+    right:32px;
+    display:none;
+    align-items:center;
+    gap:6px;
+    background:none;
+    border:none;
+    color:#fff;
+    font-family:'Tajawal', sans-serif;
+    font-size:14px;
+    font-weight:700;
+    cursor:pointer;
+    padding:8px 4px;
+  }
+  .menu-back.show{ display:flex; }
+  .menu-back svg{ width:16px; height:16px; }
+  .menu-back path{ fill:none; stroke:#fff; stroke-width:2.4; stroke-linecap:round; stroke-linejoin:round; }
+
+  .menu-view{
+    display:none;
+    width:100%;
+    max-width:520px;
+    max-height:78vh;
+    overflow-y:auto;
+    padding:0 12px;
+  }
+  .menu-view.active{ display:block; animation:fadeIn .35s ease; }
+
+  @keyframes fadeIn{ from{ opacity:0; transform:translateY(10px); } to{ opacity:1; transform:translateY(0); } }
+
+  .menu-view-title{
+    font-family:'Aref Ruqaa', serif;
+    font-weight:700;
+    font-size:32px;
+    color:#fff;
+    margin-bottom:22px;
+  }
+
+  .cat-tabs{
+    display:flex;
+    gap:10px;
+    justify-content:center;
+    flex-wrap:wrap;
+    margin-bottom:30px;
+  }
+  .cat-tab{
+    font-family:'Tajawal', sans-serif;
+    font-weight:700;
+    font-size:14px;
+    color:#fff;
+    background:rgba(255,255,255,0.12);
+    border:1px solid rgba(255,255,255,0.35);
+    padding:9px 20px;
+    border-radius:24px;
+    cursor:pointer;
+    transition:background .2s ease, color .2s ease;
+  }
+  .cat-tab.active{ background:#fff; color:var(--teal-3); }
+
+  .menu-item{
+    display:flex;
+    align-items:baseline;
+    gap:8px;
+    padding:14px 4px;
+    border-bottom:1px solid rgba(255,255,255,0.16);
+    text-align:right;
+  }
+  .item-name{ font-weight:700; font-size:18px; color:#fff; white-space:nowrap; }
+  .item-dots{ flex:1; border-bottom:2px dotted rgba(255,255,255,0.4); transform:translateY(-5px); }
+  .item-price{ font-weight:800; font-size:16px; color:var(--cream); white-space:nowrap; }
+
+  .branch-view{
+    display:none;
+    width:100%;
+    max-width:480px;
+    max-height:78vh;
+    overflow-y:auto;
+    padding:0 12px;
+  }
+  /* ---------- Custom Scrollbar for Menu & Branch Views ---------- */
+
+/* For Firefox */
+.menu-view, 
+.branch-view {
+  scrollbar-width: thin;
+  scrollbar-color: rgba(255, 255, 255, 0.4) transparent;
+  /* Add a little extra padding at the bottom so the last item isn't cut off */
+  padding-bottom: 20px; 
+}
+
+/* For WebKit (Chrome, Safari, Edge) */
+.menu-view::-webkit-scrollbar,
+.branch-view::-webkit-scrollbar {
+  width: 5px; /* Thin, elegant scrollbar */
+}
+
+.menu-view::-webkit-scrollbar-track,
+.branch-view::-webkit-scrollbar-track {
+  background: transparent; 
+}
+
+.menu-view::-webkit-scrollbar-thumb,
+.branch-view::-webkit-scrollbar-thumb {
+  background-color: rgba(255, 255, 255, 0.35);
+  border-radius: 10px;
+}
+
+.menu-view::-webkit-scrollbar-thumb:hover,
+.branch-view::-webkit-scrollbar-thumb:hover {
+  background-color: rgba(255, 255, 255, 0.65);
+}
+
+/* Add slight padding to the branch items so text doesn't touch the scrollbar on the left */
+.branch-item {
+  padding: 18px 12px 18px 4px; 
+}
+  .branch-view.active{ display:block; animation:fadeIn .35s ease; }
+
+  .branch-item{
+    padding:18px 4px;
+    border-bottom:1px solid rgba(255,255,255,0.16);
+    text-align:right;
+    cursor:pointer;
+    transition:background .2s ease;
+  }
+  .branch-item:hover{ background:rgba(255,255,255,0.08); }
+  .branch-name{ font-weight:800; font-size:19px; color:#fff; margin-bottom:6px; }
+  .branch-detail{ font-size:14px; color:var(--cream); opacity:0.85; margin-bottom:2px; }
+
+  @media (prefers-reduced-motion: reduce){
+    .site-menu, .nav-link, .cta-button, .hero-cta, .menu-view{ animation:none !important; transition:none !important; }
+    .site-menu.open .nav-link, .site-menu.open .cta-button{ opacity:1; transform:none; }
+  }
+
+  @media (max-width:480px){
+    .site-header{ padding:18px 20px; }
+    .hero{ padding:60px 24px; }
+    .hero h1{ font-size:32px; }
+  }
+</style>
+</head>
+<body>
+
+  <header class="site-header">
+    <span class="logo">شغف<span class="logo-sub"> القهوة</span></span>
+    <button class="menu-toggle" id="menuToggle" aria-label="فتح القائمة" aria-expanded="false" aria-controls="siteMenu">
+      <svg viewBox="0 0 24 24"><rect x="2" y="5" width="20" height="2.4" rx="1.2"/><rect x="2" y="11" width="20" height="2.4" rx="1.2"/><rect x="2" y="17" width="20" height="2.4" rx="1.2"/></svg>
+    </button>
+  </header>
+
+  <section class="hero">
+    <h1>شغف القهوة</h1>
+    <p>نقدّم لكم أجود حبوب القهوة المحمّصة بعناية، لنمنحكم تجربة لا تُنسى في كل كوب. تذوّقوا الفرق من أول رشفة.</p>
+    <a href="#" class="hero-cta" id="heroCta">استكشف قائمتنا</a>
+  </section>
+
+  <nav class="site-menu" id="siteMenu" aria-hidden="true">
+    <button class="menu-close" id="menuClose" aria-label="إغلاق القائمة">
+      <svg viewBox="0 0 24 24"><line x1="4" y1="4" x2="20" y2="20"/><line x1="20" y1="4" x2="4" y2="20"/></svg>
+    </button>
+    <div class="menu-inner">
+      <button class="menu-back" id="menuBack">
+        <svg viewBox="0 0 24 24"><path d="M10 6 L16 12 L10 18"/></svg>
+        رجوع
+      </button>
+
+      <div class="nav-view" id="navView">
+        <p class="menu-brand-title">شغف القهوة</p>
+        <p class="menu-brand-tagline">لحظة شغف في كل رشفة</p>
+        
+        <ul class="menu-links">
+          <li><a href="#" class="nav-link" id="menuLinkQaima">قائمتنا
+            <svg class="swoosh" viewBox="0 0 200 14"><path d="M4 8 Q60 -4 100 8 T196 8"/></svg>
+          </a></li>
+
+          <li><a href="#" class="nav-link" id="menuLinkForou3">فروعنا
+            <svg class="swoosh" viewBox="0 0 200 14"><path d="M4 8 Q60 -4 100 8 T196 8"/></svg>
+          </a></li>
+
+          <li><a href="https://wa.me/963956229004" class="nav-link">تواصل معنا
+            <svg class="swoosh" viewBox="0 0 200 14"><path d="M4 8 Q60 -4 100 8 T196 8"/></svg>
+          </a></li>
+        </ul>
+      </div>
+
+      <div class="menu-view" id="menuView">
+        <p class="menu-view-title">قائمتنا</p>
+        <div class="cat-tabs" id="catTabs"></div>
+        <div id="menuItems"></div>
+      </div>
+
+      <div class="branch-view" id="branchView">
+        <p class="menu-view-title">فروعنا</p>
+        <div id="branchList"></div>
+      </div>
+    </div>
+  </nav>
+
+<script>
+  const menu = document.getElementById('siteMenu');
+  const openBtn = document.getElementById('menuToggle');
+  const closeBtn = document.getElementById('menuClose');
+  const heroCta = document.getElementById('heroCta');
+  const navView = document.getElementById('navView');
+  const menuView = document.getElementById('menuView');
+  const branchView = document.getElementById('branchView');
+  const menuBack = document.getElementById('menuBack');
+  const menuLinkQaima = document.getElementById('menuLinkQaima');
+  const menuLinkForou3 = document.getElementById('menuLinkForou3');
+
+  const branchData = [
+    { name:'دمشق', address:'كفرسوسة', hours:'يوميًا: 7 صباحًا – 11 مساءً', lat:24.7136, lng:46.6753 },
+    { name:'دير عطية', address:'مول القلمون', hours:'يوميًا: 8 صباحًا – 12 منتصف الليل', lat:21.5433, lng:39.1728 },
+    { name:'حمص', address:'شارع الشهداء', hours:'يوميًا: 7 صباحًا – 11 مساءً', lat:26.4207, lng:50.0888 },
+    { name:'حماة', address:'مول العائلة', hours:'يوميًا: 7 صباحًا – 11 مساءً', lat:26.4207, lng:50.0888 },
+    { name:'ادلب', address:'طريق سرمين', hours:'يوميًا: 7 صباحًا – 11 مساءً', lat:26.4207, lng:50.0888 },
+    { name:'حزانو', address:'مول الغيدق', hours:'يوميًا: 7 صباحًا – 11 مساءً', lat:26.4207, lng:50.0888 },
+    { name:'الدانا', address:'مول الحمرا', hours:'يوميًا: 7 صباحًا – 11 مساءً', lat:26.4207, lng:50.0888 },
+    { name:'سلقين', address:'الكورنيش', hours:'يوميًا: 7 صباحًا – 11 مساءً', lat:26.4207, lng:50.0888 }
+  ];
+
+  function renderBranches(){
+    const el = document.getElementById('branchList');
+    el.innerHTML = '';
+    branchData.forEach(b=>{
+      const row = document.createElement('div');
+      row.className = 'branch-item';
+      row.innerHTML = '<p class="branch-name">'+b.name+'</p><p class="branch-detail">'+b.address+'</p><p class="branch-detail">'+b.hours+'</p>';
+      row.addEventListener('click', () => openLocationOnMap(b.lat, b.lng));
+      el.appendChild(row);
+    });
+  }
+
+  function openLocationOnMap(lat, lng){
+    const url = 'https://www.google.com/maps/search/?api=1&query=' + lat + ',' + lng;
+    window.open(url, '_blank');
+  }
+
+  const menuData = {
+    hot: { label:'ساخنة', items:[
+      {name:'إسبريسو', price:'12 ريال'},
+      {name:'أمريكانو', price:'14 ريال'},
+      {name:'لاتيه', price:'16 ريال'},
+      {name:'كابتشينو', price:'16 ريال'},
+      {name:'موكا', price:'18 ريال'},
+      {name:'قهوة عربية', price:'10 ريال'}
+    ]},
+    cold: { label:'باردة', items:[
+      {name:'آيس لاتيه', price:'18 ريال'},
+      {name:'آيس أمريكانو', price:'15 ريال'},
+      {name:'كولد برو', price:'20 ريال'},
+      {name:'فرابيه كراميل', price:'22 ريال'}
+    ]},
+    bakery: { label:'مخبوزات', items:[
+      {name:'كرواسون', price:'12 ريال'},
+      {name:'تشيز كيك', price:'20 ريال'},
+      {name:'كوكيز شوكولاتة', price:'10 ريال'}
+    ]}
+  };
+  let activeCat = 'hot';
+
+  function renderTabs(){
+    const tabsEl = document.getElementById('catTabs');
+    tabsEl.innerHTML = '';
+    Object.keys(menuData).forEach(key=>{
+      const btn = document.createElement('button');
+      btn.className = 'cat-tab' + (key===activeCat ? ' active' : '');
+      btn.textContent = menuData[key].label;
+      btn.addEventListener('click', ()=>{ activeCat = key; renderTabs(); renderItems(); });
+      tabsEl.appendChild(btn);
+    });
+  }
+
+  function renderItems(){
+    const itemsEl = document.getElementById('menuItems');
+    itemsEl.innerHTML = '';
+    menuData[activeCat].items.forEach(item=>{
+      const row = document.createElement('div');
+      row.className = 'menu-item';
+      row.innerHTML = '<span class="item-name">'+item.name+'</span><span class="item-dots"></span><span class="item-price">'+item.price+'</span>';
+      itemsEl.appendChild(row);
+    });
+  }
+
+  function showMenuView(){
+    navView.classList.add('hidden');
+    branchView.classList.remove('active');
+    menuView.classList.add('active');
+    menuBack.classList.add('show');
+    renderTabs();
+    renderItems();
+  }
+  function showBranchView(){
+    navView.classList.add('hidden');
+    menuView.classList.remove('active');
+    branchView.classList.add('active');
+    menuBack.classList.add('show');
+    renderBranches();
+  }
+  function showNavView(){
+    menuView.classList.remove('active');
+    branchView.classList.remove('active');
+    navView.classList.remove('hidden');
+    menuBack.classList.remove('show');
+  }
+
+  function openMenu(){
+    menu.classList.add('open');
+    menu.setAttribute('aria-hidden','false');
+    openBtn.setAttribute('aria-expanded','true');
+    document.body.style.overflow='hidden';
+  }
+  function closeMenu(){
+    menu.classList.remove('open');
+    menu.setAttribute('aria-hidden','true');
+    openBtn.setAttribute('aria-expanded','false');
+    document.body.style.overflow='';
+    setTimeout(showNavView, 450);
+  }
+
+  openBtn.addEventListener('click', openMenu);
+  closeBtn.addEventListener('click', closeMenu);
+  heroCta.addEventListener('click', (e)=>{ e.preventDefault(); openMenu(); });
+  menuLinkQaima.addEventListener('click', (e)=>{ e.preventDefault(); showMenuView(); });
+  menuLinkForou3.addEventListener('click', (e)=>{ e.preventDefault(); showBranchView(); });
+  menuBack.addEventListener('click', showNavView);
+  document.addEventListener('keydown', (e)=>{ if(e.key==='Escape') closeMenu(); });
+</script>
+
+</body>
+</html>
